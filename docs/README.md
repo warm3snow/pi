@@ -38,10 +38,20 @@
 
 **[09 · Pi Evals 详细设计与应用示例：代码修复（让测试通过）评估](09-pi-evals-design-and-code-fix-example.md)**
 `Harness` 接口的领域无关性；`pi-harness.ts` 的隔离与硬校验；`evalHarnessTable` 的 groupKey 配对机制；`summary.ts` 的配对差值统计；以及把这套方法论迁移到"手机导购 Agent"的完整示例（含"质量打分 vs 安全红线"的区分）。
-→ 放在最后，因为它同时依赖前面所有篇章的概念。
+→ 依赖前面各篇的概念，建议读完 01-08 再读。
 
 **[10 · Pi Agent Telemetry 设计详解](10-pi-telemetry-design.md)**
 厂商无关的 `TelemetryContext` 回调式契约；`NOOP` / `InMemoryTelemetryContext` 参考实现；类型化 Schema（`AI_TELEMETRY_SCHEMA` / `HARNESS_TELEMETRY_SCHEMA`）与 `startAiSpan` / `startHarnessSpan`；Adapter 一致性测试套件；跨包（`pi-telemetry` / `pi-ai` / `pi-agent-core` / 应用）的所有权切分；与评估体系里 Token/Latency/Cost 报告的衔接机制。
+
+### 第四部分：实践指南
+
+**[11 · Pi Subagent 编写指南：从编码型 Agent 到架构设计型 Agent](11-pi-writing-subagents.md)**
+Agent 定义文件的 frontmatter 四字段与解析边界；系统提示词正文的六段式结构（角色边界/输入契约/工作策略/输出契约/交接约定/硬约束）；工具白名单的真实语义与选择矩阵；模型与思考等级的继承规则；官方四个编码 Agent 拆解 + 一个可直接使用的 `test-fixer`；任务文本五要素、工作流模板（`$@`/`$1`/`{previous}`）与三种模式的选择；单独跑一次子 Agent 的调试方法；以及**架构设计类 subagent**——为什么它的核心是"把断言变成带引用的断言"、ADR 输出契约、并行出候选 + 对抗性评审 + 收敛的编排、验收抽查清单。
+→ 依赖 02 §6/§7（工具与扩展）和 03（subagent 机制），是它们的实践落地篇。
+
+**[12 · Pi Coding Agent 提示词体系：主干、注入链路与六个改写入口](12-pi-coding-agent-prompts.md)**
+最终 system prompt 的五个来源与拼装顺序（`buildSystemPrompt` 逐段拆解）；工具提示词贡献点（`promptSnippet` / `promptGuidelines`）；`AGENTS.md` 的逐级发现与 worktree 去重；skills 为什么只进索引；六个改写入口（AGENTS.md / APPEND_SYSTEM.md / SYSTEM.md / CLI / 模板 / 扩展）的作用边界与代价；斜杠命令模板的变量与加载规则；`before_agent_start` 的链式覆盖；压缩提示词这一套独立体系；以及怎么 dump 出最终 prompt。
+→ 想把"让 Pi 按我的方式干活"落到具体文件时读这篇。
 
 ## 按问题查找
 
@@ -67,6 +77,22 @@
 | 怎么分发我写的扩展 | 08 §3 |
 | 怎么远程连接一个 Agent 会话 | 08 §5 |
 | 怎么衡量我的改动有没有让 Agent 变好 | 09 |
+| 怎么写一个自己的 subagent | 11（全篇） |
+| subagent 的 frontmatter 能写哪些字段 | 11 §2 |
+| 子 Agent 为什么改了不该改的文件 | 11 §4 |
+| 编码类 subagent 怎么写 | 11 §6 / §7 |
+| 委派时任务文本该写什么 | 11 §8.1 |
+| 子 Agent 行为不对怎么调试 | 11 §9 |
+| 架构设计类 subagent 怎么写 | 11 §12-§14 |
+| 怎么把 subagent 分发给团队 | 11 §17 |
+| 模型每轮到底看到了什么 | 12 §1 / §6 |
+| 该把项目规矩写到哪个文件 | 12 §7 / §14 |
+| `SYSTEM.md` 和 `APPEND_SYSTEM.md` 有什么区别 | 12 §8 |
+| 自定义工具为什么从不被调用 | 12 §3 / §14 |
+| `AGENTS.md` 改了没生效怎么排查 | 12 §4 / §14 |
+| 斜杠命令模板的变量怎么写 | 12 §9 |
+| 怎么看到最终的 system prompt | 12 §12 |
+| 压缩摘要的提示词在哪 | 12 §11 |
 | 怎么把 Pi 接入 OpenTelemetry/Sentry | 10 §11 |
 | 一次 LLM 调用能观测到哪些字段 | 10 §6.1 |
 | Harness 的重试/压缩/工具执行怎么在遥测里表达 | 10 §6.2 |
